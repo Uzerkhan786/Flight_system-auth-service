@@ -1,5 +1,7 @@
+const { where } = require('sequelize');
 const {User}=require('../models/index');
 const bcrypt=require('bcrypt');
+
 class userRepository{
 
     async createUser(data){
@@ -57,6 +59,33 @@ class userRepository{
         return user
 
     }
+
+
+    async checkPassword(plainPassword,hashPassword){
+        const check=await bcrypt.compareSync(plainPassword,hashPassword);
+        return check;
+    }
+
+    async getByEmail(email){
+        const e=await User.findOne({
+            where:{
+                email:email
+            }
+        })
+        return e;
+    }
+
+    async getById(id){
+        const e=await User.findOne({
+            where:{
+                id:id
+            }
+        })
+        return e;
+    }
+    
+
+    
 }
 
 module.exports=userRepository;

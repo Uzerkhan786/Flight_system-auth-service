@@ -1,4 +1,7 @@
+
 const {userRepository}=require('../repository/index');
+const jwt=require('jsonwebtoken');
+const bcrypt= require('bcrypt');
 
 class userService{
 
@@ -51,5 +54,51 @@ class userService{
         const user=await this.user.getAllUser(data);
         return user;
     }
+
+    async signInService(email,password){
+        const user=await this.user.getByEmail(email);
+        const comparePassword=bcrypt.compareSync(password,user.password);
+
+        if(!comparePassword){
+            console.log("incorrect password");
+            throw {error:"incorrect password"}
+        }
+        
+    }
+
+
+    async authenticate(token){
+           const response=this.verifyToken(token);
+           if(!response){
+            throw {error:'invalid token'}
+           }
+
+           const a=this.user.getById(response.id);
+           if(!a){
+            console.log("token  is invalid");
+           }
+           
+           
+
+    }
+
+    createToken(data){
+        const c=jwt.sign(data,'sssss',{expiresIn:'1d'});
+        return c;
+    }
+
+    verifyToken(token){
+        const userToken=jwt.verify(token,'sssss')
+        return userToken;
+    }
+
+
+   
+     
+
+    
+
+
+    
 }
 module.exports=userService;

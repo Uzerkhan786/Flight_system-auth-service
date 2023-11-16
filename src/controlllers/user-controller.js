@@ -85,11 +85,36 @@ const getUserUpdateController=async(req,res)=>{
 
     }
 
+    const signIn=async(req,res)=>{
+              const user=await User.signInService(req.body.email,req.body.password);
+              return res.json({
+                     data:user,
+                     message:"sign in successful",
+                     error:{}
+              })
+    }  
+
+    // const accessAuthenticate=async(req,res)=>{
+    //    const token=req.headers['x-access-token'];
+    //      const user=await User.authenticate();
+
+    //      return res.json({
+    //         data:user
+    //      })
+    // }
+
+
+    
+
+    
+
+
 
 module.exports={
     createUserController,
     getAllUserController,
     getOneUserController,
     getUserUpdateController,
-    getOneUserDeleteController
+    getOneUserDeleteController,
+    signIn
 }
