@@ -103,7 +103,37 @@ const getUserUpdateController=async(req,res)=>{
     //      })
     // }
 
+    const getByIdController=async(req,res)=>{
 
+       const user=await User.getById(req.body.id,req.body);
+
+       try {
+            return res.json({
+                data:user
+            })
+       } catch (error) {
+        
+       }
+
+    }
+
+
+    const isAuthen=async(req,res)=>{
+        try {
+            const token=req.headers['x-access-token'];
+            const user=await User.authenticate(token);
+            res.json({
+                data:user,
+                success:true
+            })
+        } catch (error) {
+            res.json({
+                data:'error come',
+                message:'cannot get header or invalid header'
+            })
+        }
+      
+    }
     
 
     
@@ -116,5 +146,7 @@ module.exports={
     getOneUserController,
     getUserUpdateController,
     getOneUserDeleteController,
-    signIn
+    signIn,
+    getByIdController,
+    isAuthen
 }

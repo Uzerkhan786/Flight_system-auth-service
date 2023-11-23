@@ -1,5 +1,5 @@
 const { where } = require('sequelize');
-const {User}=require('../models/index');
+const {User,Role}=require('../models/index');
 const bcrypt=require('bcrypt');
 
 class userRepository{
@@ -15,7 +15,9 @@ class userRepository{
     }
     async getOneUser(id){
         try {
-            const user=await User.findByPk(id);
+            const user=await User.findByPk(id,{
+                  attributes:['email','id']
+            });
             return user
         } catch (error) {
             throw{error};
@@ -82,6 +84,19 @@ class userRepository{
             }
         })
         return e;
+    }
+
+
+    async getUserId(userId,N){
+
+        const user=await User.findByPk(userId);
+        const role=await Role.findOne({
+               where:{
+                name:N.name
+               }
+        })
+
+        return user.hasRole(role);
     }
     
 

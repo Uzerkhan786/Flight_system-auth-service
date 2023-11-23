@@ -7,6 +7,8 @@ router.get('/user/:id',userController.getOneUserController);
 router.delete('/user/:id',userController.getOneUserDeleteController);
 router.patch('/user/:id',userController.getUserUpdateController)
 router.get('/user',userController.getAllUserController);
+router.get('/isAdmin',userController.getByIdController);
+router.get('/isAuuth',userController.isAuthen)
 
 router.post('/user/signIn',userController.signIn);
 module.exports=router

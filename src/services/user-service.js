@@ -2,7 +2,7 @@
 const {userRepository}=require('../repository/index');
 const jwt=require('jsonwebtoken');
 const bcrypt= require('bcrypt');
-
+const {User,Role}=require('../models/index')
 class userService{
 
     constructor(){
@@ -63,22 +63,30 @@ class userService{
             console.log("incorrect password");
             throw {error:"incorrect password"}
         }
-        
+        const a=this.createToken({email:user.email,id:user.id});
+        console.log(a);
     }
 
 
     async authenticate(token){
-           const response=this.verifyToken(token);
+        try {
+            const response=this.verifyToken(token);
+
            if(!response){
             throw {error:'invalid token'}
            }
 
-           const a=this.user.getById(response.id);
-           if(!a){
-            console.log("token  is invalid");
-           }
-           
-           
+           const a=await this.user.getById(response.id);
+           if(a.id==response.id){
+               return response.id;
+           } 
+           else{
+            throw {error:'Invalid id'}
+           } 
+        } catch (error) {
+            throw{error:'error come'}
+        }
+                    
 
     }
 
@@ -92,6 +100,13 @@ class userService{
         return userToken;
     }
 
+    async getById(userId,N){
+        const user=this.user.getUserId(userId,N);
+        return user;
+    }
+
+
+    
 
    
      
